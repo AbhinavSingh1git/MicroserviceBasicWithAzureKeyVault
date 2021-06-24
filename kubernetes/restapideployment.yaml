@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-deployment
+spec:
+  selector:
+    matchLabels:
+      app: microservicepod
+  template:
+    metadata:
+      labels:
+        app: microservicepod
+    spec:
+      containers:
+      - name: microservicecontainer
+        image: microservicebasicimage:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+            - name: ServiceSettings__ApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: microservice-secrets
+                  key: api-key
