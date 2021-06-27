@@ -26,15 +26,21 @@ namespace BasicMicroservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.Configure<ServiceSettings>(Configuration.GetSection(nameof(ServiceSettings)));
+            var section = Configuration.GetSection(nameof(ServiceSettings));
+            var serviceSettingsSection=    section.Get<ServiceSettings>();
+           // services.Configure<ServiceSettings>(Configuration.GetSection(nameof(ServiceSettings)));
+           services.Configure<ServiceSettings>(serviceSettings=>{
+               serviceSettings.ApiKey= Configuration.GetValue<string>("ApiKey");
+               serviceSettings.OpenWeatherHost=serviceSettingsSection.OpenWeatherHost;
+           });
+           
             //services.AddHttpClient<WeatherClient>();
                services.AddHttpClient<WeatherClient>()
                 .AddTransientHttpErrorPolicy(builder => 
                  builder.WaitAndRetryAsync(10, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
                 .AddTransientHttpErrorPolicy(builder => 
                  builder.CircuitBreakerAsync(3, TimeSpan.FromSeconds(10)));
-            
+             
            // services.AddHealthChecks();
            services.AddHealthChecks()
                 .AddCheck<ExternalEndpointHealthCheck>("WeatherCheck");
