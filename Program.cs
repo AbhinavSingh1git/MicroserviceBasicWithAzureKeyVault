@@ -22,12 +22,12 @@ namespace BasicMicroservice
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging((context,logging) =>
+                .ConfigureLogging((context, logging) =>
                 {
-                    if(context.HostingEnvironment.IsProduction())
+                    if (context.HostingEnvironment.IsProduction())
                     {
                         logging.ClearProviders();
-                       logging.AddJsonConsole();
+                        logging.AddJsonConsole();
                     }
                 })
                 .ConfigureAppConfiguration((ctx, builder) =>
@@ -48,7 +48,7 @@ namespace BasicMicroservice
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-              private static string GetKeyVaultEndpoint() => "https://abhinavazurekeyvault.vault.azure.net";
-              //private static string GetKeyVaultEndpoint() => "https://<YourKeyVaultName>.vault.azure.net";
+        private static string GetKeyVaultEndpoint() => "https://abhinavazurekeyvault.vault.azure.net";
+        //private static string GetKeyVaultEndpoint() => "https://<YourKeyVaultName>.vault.azure.net";
     }
 }
